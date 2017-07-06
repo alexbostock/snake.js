@@ -57,3 +57,6 @@ typings/
 # dotenv environment variables file
 .env
 
+# Additional
+.DS_STORE
+.swp
