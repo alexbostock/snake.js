@@ -1,4 +1,4 @@
-const model = require("model/snake.js");
+const model = require("./model/snake.js");
 
 var game = new model.Game();
 
