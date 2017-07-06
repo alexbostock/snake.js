@@ -6,37 +6,35 @@ function Game() {
 	this.interval = 500 // milliseconds
 	this.snakes = [];
 
-	this.addSnake = function(ip) {
+	this.addSnake = function() {
 		var pos = new Vector(0, 0);
 		var vel = new Vector(1, 0);
 
-		this.snakes.push(new Snake(pos, vel, ip));
+		this.snakes.push(new Snake(pos, vel));
 
 		return this.snakes.length - 1;
 	}
 
-	this.move = function(dir, id, ip) {
+	this.move = function(dir, id) {
 		if (id < this.snakes.length) {
 			var s = this.snakes[id];
 
-			if (ip === s.ip) {
-				switch (dir) {
-					case "w":
-						s.vel = new Vector(0, 1);
-						break;
-	
-					case "a":
-						s.vel = new Vector(-1, 0);
-						break;
-	
-					case "s":
-						s.vel = new Vector(0, -1);
-						break;
-	
-					case "d":
-						s.vel = new Vector(1, 0);
-						break;
-				}
+			switch (dir) {
+				case "w":
+					s.vel = new Vector(0, 1);
+					break;
+
+				case "a":
+					s.vel = new Vector(-1, 0);
+					break;
+
+				case "s":
+					s.vel = new Vector(0, -1);
+					break;
+
+				case "d":
+					s.vel = new Vector(1, 0);
+					break;
 			}
 		}
 	}
@@ -73,9 +71,7 @@ function Game() {
 	}
 }
 
-function Snake(pos, vel, ip) {
-	this.ip = ip;
-
+function Snake(pos, vel) {
 	this.position = pos;
 	this.velocity = vel;
 	this.tail = [pos];
