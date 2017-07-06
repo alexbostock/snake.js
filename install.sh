@@ -3,5 +3,6 @@
 
 npm install
 
-minify view/scripts/
+# Minify
+node node_modules/minifier/index.js view/scripts
 
