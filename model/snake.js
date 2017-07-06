@@ -57,7 +57,6 @@ function Game(interval) {
 					}
 
 					if (this.snakes[i].position.equals(this.snakes[j].tail[k])) {
-						this.snakes[i].die();
 						this.snakes.splice(i, 1);
 						break snake;
 					}
@@ -73,9 +72,6 @@ function Snake(pos, vel) {
 	this.position = pos;
 	this.velocity = vel;
 	this.tail = [pos];
-
-	this.die = function() {
-	}
 
 	this.move = function() {
 		this.position = this.position.add(this.velocity);

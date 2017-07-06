@@ -8,6 +8,10 @@ app.get("/", function($) {
 	$.sendFile("view/index.html");
 });
 
+app.get("/play", function($) {
+	$.sendFile("view/play.html");
+});
+
 app.post("/control/:key/:dir", game.control);
 app.post("/register", game.register);
 app.get("/state", game.state);

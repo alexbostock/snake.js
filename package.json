@@ -6,6 +6,7 @@
 	"dependencies": {
 		"diet": "^0.16.0",
 		"diet-static": "^2.2.0",
+		"minifier": "^0.8.1",
 		"uniqid": "^4.1.1"
 	},
 	"repository": {
