@@ -1,3 +1,7 @@
+const model = require("model/snake.js");
+
+var game = new model.Game();
+
 var server = require("diet");
 var app = server();
 app.listen(8000);
