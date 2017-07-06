@@ -2,7 +2,7 @@ const game = require("./controller/logic.js");
 
 var server = require("diet");
 var app = server();
-app.listen(8000);
+app.listen("http://localhost:8000");
 
 app.get("/", function($) {
 	$.sendFile("view/index.html");
@@ -10,7 +10,7 @@ app.get("/", function($) {
 
 app.post("/control/:key/:dir", game.control);
 app.post("/register", game.register);
-app.get("state", game.state);
+app.get("/state", game.state);
 
 var static = require("diet-static")({path : app.path + "/view"});
 

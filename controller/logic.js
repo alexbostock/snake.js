@@ -1,22 +1,33 @@
 const model = require("../model/snake.js");
 const uniqid = require("uniqid");
 
-var game = new model.Game();
+const interval = 500;	// milliseconds
+
+var game = new model.Game(interval);
 var snakes = {};	// Maps client's unique id to array index in game model
+
+var jsonState = JSON.stringify(game);
+
+function stepGame() {
+	jsonState = game.step();
+}
+
+var timer = setInterval(stepGame, interval);
 
 function control($) {
 	var id = snakes[$.params.key];
 
 	if (id !== undefined) {
 		game.move($.params.dir, id);
+		$.end("Done");
+	} else {
+		$.status("400", "Bad Request");
 	}
-
-	$.end();
 }
 
 function register($) {
 	var id = game.addSnake();
-	var key = uniqid(id);
+	var key = uniqid(id + "-");
 
 	snakes[key] = id;
 
@@ -24,7 +35,8 @@ function register($) {
 }
 
 function state($) {
-	$.end();
+	$.header("content-type", "application/json");
+	$.end(jsonState);
 }
 
 exports.control = control;

@@ -1,9 +1,9 @@
 // snake.js
 // Base data model
 
-function Game() {
+function Game(interval) {
 	this.clock = 0;
-	this.interval = 500 // milliseconds
+	this.interval = interval
 	this.snakes = [];
 
 	this.addSnake = function() {
@@ -39,12 +39,8 @@ function Game() {
 		}
 	}
 
-	this.start = function() {
-		setInterval(this.step, this.interval);
-	}
-
 	this.step = function() {
-		clock++;
+		this.clock++;
 
 		for (var i = 0; i < this.snakes.length; i++) {
 			this.snakes[i].move();
@@ -68,6 +64,8 @@ function Game() {
 				}
 			}
 		}
+
+		return JSON.stringify(this);
 	}
 }
 
