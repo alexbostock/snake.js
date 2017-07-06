@@ -1,0 +1,14 @@
+{
+	"name": "snake.js",
+	"description": "A snake game",
+	"author": "alexbostock",
+	"homepage": "https://github.com/alexbostock/snake.js/",
+	"dependencies": {
+		"diet": "^0.16.0",
+		"diet-static": "^2.2.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/alexbostock.co.uk/snake.js.git"
+	}
+}
