@@ -3,7 +3,10 @@ const uniqid = require("uniqid");
 
 const interval = 500;	// milliseconds
 
-var game = new model.Game(interval);
+const width = 100;
+const height = 50;
+
+var game = new model.Game(interval, width, height);
 var snakes = {};	// Maps client's unique id to array index in game model
 
 var jsonState = JSON.stringify(game);

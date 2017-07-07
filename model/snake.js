@@ -1,14 +1,28 @@
 // snake.js
 // Base data model
 
-function Game(interval) {
+function Game(interval, w, h) {
 	this.clock = 0;
 	this.interval = interval
 	this.snakes = [];
 
+	this.width = w;
+	this.height = h;
+
+	this.wall = [];
+
+	for (var i = 0; i < w; i++) {
+		wall.push(new Vector(0, i));
+		wall.push(new Vector(h - 1, i));
+	}
+
+	for (var i = 1; i < h - 1; i++) {
+		wall.push(new Vector(i, 0));
+		wall.push(new Vector(i, w - 1));
+
 	this.addSnake = function() {
-		var pos = new Vector(0, 0);
-		var vel = new Vector(1, 0);
+		var pos = new Vector(i, 0);
+		var vel = new Vector(i, h - 1);
 
 		this.snakes.push(new Snake(pos, vel));
 
@@ -60,6 +74,13 @@ function Game(interval) {
 						this.snakes.splice(i, 1);
 						break snake;
 					}
+				}
+			}
+
+			for (var j = 0; j < this.walls.length; j++) {
+				if (this.snakes[i].position.equals(this.wall[j])) {
+					this.snakes.splice(i, 1);
+					break;
 				}
 			}
 		}
