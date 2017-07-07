@@ -1,6 +1,10 @@
 const model = require("../model/snake.js");
 const uniqid = require("uniqid");
 
+const serverKey = uniqid();	// For admin purposes
+
+console.log("Server key:", serverKey);
+
 const interval = 500;	// milliseconds
 
 const width = 100;
@@ -17,6 +21,33 @@ function stepGame() {
 
 var timer = setInterval(stepGame, interval);
 
+function admin($) {
+	if ($.params.key === serverKey) {
+		switch ($.params.command) {
+			case "reset":
+				clearInterval(timer);
+				game = new modeL.Game(interval, width, height);
+				snakes = {};
+				jsonState = JSON.stringify(game);
+
+				// Fall through to restart
+
+			case "start":
+				timer = setInterval(stepGame, interval);
+				break;
+
+			case "stop":
+				clearInterval(timer);
+				break;
+		}
+
+		$.end("Done");
+	} else {
+		$.status("403", "Forbidden");
+		$.end("Forbidden");
+	}
+}
+
 function control($) {
 	var id = snakes[$.params.key];
 
@@ -25,6 +56,7 @@ function control($) {
 		$.end("Done");
 	} else {
 		$.status("400", "Bad Request");
+		$.end("Not done");
 	}
 }
 
@@ -42,6 +74,7 @@ function state($) {
 	$.end(jsonState);
 }
 
+exports.admin = admin;
 exports.control = control;
 exports.register = register;
 exports.state = state;

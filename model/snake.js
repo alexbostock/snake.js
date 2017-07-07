@@ -12,13 +12,14 @@ function Game(interval, w, h) {
 	this.wall = [];
 
 	for (var i = 0; i < w; i++) {
-		wall.push(new Vector(0, i));
-		wall.push(new Vector(h - 1, i));
+		this.wall.push(new Vector(0, i));
+		this.wall.push(new Vector(h - 1, i));
 	}
 
 	for (var i = 1; i < h - 1; i++) {
-		wall.push(new Vector(i, 0));
-		wall.push(new Vector(i, w - 1));
+		this.wall.push(new Vector(i, 0));
+		this.wall.push(new Vector(i, w - 1));
+	}
 
 	this.addSnake = function() {
 		var pos = new Vector(i, 0);
