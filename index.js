@@ -1,6 +1,8 @@
 const game = require("./controller/logic.js");
 
-const root = "/Users/bossie/projects/snake.js/";	// Change this for production
+const config = require("./config.js");
+
+const root = config.root;
 
 const express = require("express");
 const app = express();
