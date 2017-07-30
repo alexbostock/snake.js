@@ -16,7 +16,7 @@ printf  "\troot: \"" >> config.js
 pwd | tr -d '\n' >> config.js
 printf "\"\n}\n\n" >> config.js
 
-printf "exports = config;\n\n" >> config.js
+printf "module.exports = config;\n\n" >> config.js
 
 echo "config.js generated"
 
