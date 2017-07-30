@@ -50,7 +50,14 @@ function Game(interval, w, h) {
 				case "d":
 					s.vel = new Vector(1, 0);
 					break;
+
+				default:
+					return false;
 			}
+
+			return true;
+		} else {
+			return false;
 		}
 	}
 

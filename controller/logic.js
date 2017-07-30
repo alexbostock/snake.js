@@ -21,9 +21,9 @@ function stepGame() {
 
 var timer = setInterval(stepGame, interval);
 
-function admin($) {
-	if ($.params.key === serverKey) {
-		switch ($.params.command) {
+function admin(req, res) {
+	if (req.params.key === serverKey) {
+		switch (req.params.command) {
 			case "reset":
 				clearInterval(timer);
 				game = new modeL.Game(interval, width, height);
@@ -41,37 +41,34 @@ function admin($) {
 				break;
 		}
 
-		$.end("Done");
+		res.sendStatus(200);
 	} else {
-		$.status("403", "Forbidden");
-		$.end("Forbidden");
+		res.sendStatus(403);
 	}
 }
 
-function control($) {
-	var id = snakes[$.params.key];
+function control(req, res) {
+	var id = snakes[req.params.key];
 
-	if (id !== undefined) {
-		game.move($.params.dir, id);
-		$.end("Done");
+	if (game.move(req.params.dir, id)) {
+		res.sendStatus(200);
 	} else {
-		$.status("400", "Bad Request");
-		$.end("Not done");
+		res.sendStatus(400);
 	}
 }
 
-function register($) {
+function register(req, res) {
 	var id = game.addSnake();
 	var key = uniqid(id + "-");
 
 	snakes[key] = id;
 
-	$.end(key);
+	res.send(key);
 }
 
-function state($) {
-	$.header("content-type", "application/json");
-	$.end(jsonState);
+function state(req, res) {
+	res.type("json");
+	res.send(jsonState);
 }
 
 exports.admin = admin;
