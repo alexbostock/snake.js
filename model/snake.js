@@ -78,7 +78,7 @@ function Game(interval, w, h) {
 				}
 			}
 
-			for (var j = 0; j < this.walls.length; j++) {
+			for (var j = 0; j < this.wall.length; j++) {
 				if (this.snakes[i].position.equals(this.wall[j])) {
 					this.snakes.splice(i, 1);
 					break;
