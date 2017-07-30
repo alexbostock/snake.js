@@ -60,6 +60,7 @@ typings/
 # Additional
 .DS_STORE
 
+config.js
 *.min.js
 
 # Vim
