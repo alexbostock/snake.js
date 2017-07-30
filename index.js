@@ -22,5 +22,9 @@ app.get("/state", game.state);
 
 app.use(express.static("view"));
 
+app.use((req, res) => {
+	res.sendStatus(400);
+}
+
 app.listen(8000, () => console.log("snake.js running on port 8000"));
 
