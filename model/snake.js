@@ -109,6 +109,8 @@ function Snake(pos, vel) {
 	this.velocity = vel;
 	this.tail = [pos];
 
+	this.colour = "#00FF00";
+
 	this.move = function() {
 		this.position = this.position.add(this.velocity);
 	

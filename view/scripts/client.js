@@ -51,10 +51,12 @@ function Game(interval) {
 		var leftMargin = (w - this.state.width * cellSize) / 2;
 		var topMargin = (h - this.state.height * cellSize) / 2;
 
-		context.fillStyle = "#FF0000";
-
 		for (var i = 0; i < this.state.snakes.length; i++) {
-			var snake = this.state.snakes[i].tail;
+			var snake = this.state.snakes[i];
+
+			context.fillStyle = snake.colour;
+
+			snake = snake.tail;
 
 			for (var j = 0; j < snake.length; j++) {
 				var x = snake[j].x;
