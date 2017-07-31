@@ -1,5 +1,3 @@
-const interval = 500;
-
 function Game(interval) {
 	var game = this
 
@@ -8,8 +6,17 @@ function Game(interval) {
 	xhr.onreadystatechange = function() {
 		if (this.readyState === 4) {
 			if (this.status === 200) {
-				game.id = this.responseText;
-				setInterval(game.refresh, 500);
+				console.log(this.responseText);
+
+				var res = this.responseText.split(",");
+
+				game.id = res[0];
+				game.interval = parseInt(res[1]);
+
+				console.log(game.id);
+				console.log(game.interval);
+
+				setInterval(game.refresh, game.interval);
 
 				console.log(game.id);
 			} else {

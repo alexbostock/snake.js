@@ -63,7 +63,7 @@ function register(req, res) {
 
 	snakes[key] = id;
 
-	res.send(key);
+	res.send(key + "," + interval);
 }
 
 function state(req, res) {
