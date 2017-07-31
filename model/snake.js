@@ -12,18 +12,21 @@ function Game(interval, w, h) {
 	this.wall = [];
 
 	for (var i = 0; i < w; i++) {
-		this.wall.push(new Vector(0, i));
-		this.wall.push(new Vector(h - 1, i));
+		this.wall.push(new Vector(i, 0));
+		this.wall.push(new Vector(i, h - 1));
 	}
 
 	for (var i = 1; i < h - 1; i++) {
-		this.wall.push(new Vector(i, 0));
-		this.wall.push(new Vector(i, w - 1));
+		this.wall.push(new Vector(0, i));
+		this.wall.push(new Vector(w - 1, i));
 	}
 
 	this.addSnake = function() {
-		var pos = new Vector(i, 0);
-		var vel = new Vector(i, h - 1);
+		//var pos = new Vector(i, 0);
+		//var vel = new Vector(i, h - 1);
+
+		var pos = new Vector(this.width / 2, this.height / 2);
+		var vel = new Vector(1, 0);
 
 		this.snakes.push(new Snake(pos, vel));
 
@@ -36,28 +39,32 @@ function Game(interval, w, h) {
 
 			switch (dir) {
 				case "w":
-					s.vel = new Vector(0, 1);
+					var v = new Vector(0, -1);
 					break;
 
 				case "a":
-					s.vel = new Vector(-1, 0);
+					var v = new Vector(-1, 0);
 					break;
 
 				case "s":
-					s.vel = new Vector(0, -1);
+					var v = new Vector(0, 1);
 					break;
 
 				case "d":
-					s.vel = new Vector(1, 0);
+					var v = new Vector(1, 0);
 					break;
 
 				default:
 					return false;
 			}
 
-			return true;
-		} else {
-			return false;
+			if (v.add(s.velocity).equals(new Vector(0, 0))) {
+				// Don't allow about turn
+				return false;
+			} else {
+				s.velocity = v;
+				return true;
+			}
 		}
 	}
 

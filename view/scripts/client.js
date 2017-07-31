@@ -10,8 +10,10 @@ function Game(interval) {
 			if (this.status === 200) {
 				game.id = this.responseText;
 				setInterval(game.refresh, 500);
+
+				console.log(game.id);
 			} else {
-				console.log("Error", this.status, "could not register");
+				console.error(this.status, "could not register");
 			}
 		}
 	}
@@ -20,8 +22,10 @@ function Game(interval) {
 	xhr.send();
 
 	this.control = function(key) {
-		this.xhr2.open("POST", "control/" + this.id + "/" + key, true);
-		this.xhr2.send();
+		var req = new XMLHttpRequest();
+
+		req.open("POST", "control/" + this.id + "/" + key, true);
+		req.send();
 	}
 
 	this.draw = function() {
@@ -31,7 +35,64 @@ function Game(interval) {
 		var w = canvas.width;
 		var h = canvas.height;
 
-		// console.log("draw");
+		context.fillStyle = "#FFFFFF";
+		context.fillRect(0, 0, w, h);
+
+		var cellSize = Math.min(w / this.state.width, h / this.state.height);
+		cellSize = Math.floor(cellSize);
+
+		var leftMargin = (w - this.state.width * cellSize) / 2;
+		var topMargin = (h - this.state.height * cellSize) / 2;
+
+		context.fillStyle = "#FF0000";
+
+		for (var i = 0; i < this.state.snakes.length; i++) {
+			var snake = this.state.snakes[i].tail;
+
+			for (var j = 0; j < snake.length; j++) {
+				var x = snake[j].x;
+				var y = snake[j].y;
+
+				context.fillRect(leftMargin + x * cellSize, topMargin + y * cellSize, cellSize, cellSize);
+			}
+		}
+
+		context.fillStyle = "#000000";
+
+		for (var i = 0; i < this.state.wall.length; i++) {
+			var x = this.state.wall[i].x;
+			var y = this.state.wall[i].y;
+
+			context.fillRect(leftMargin + x * cellSize, topMargin + y * cellSize, cellSize, cellSize);
+		}
+	}
+
+	this.keyPressHandler = function(k) {
+		// Handles wasd and cursor keys
+
+		switch (k.which) {
+			case 38:
+			case 87:
+				game.control("w");
+				break;
+
+			case 37:
+			case 65:
+				game.control("a");
+				break;
+
+			case 40:
+			case 83:
+				game.control("s");
+				break;
+
+			case 39:
+			case 68:
+				game.control("d");
+				break;
+
+			// Do nothing for any other key
+		}
 	}
 
 	this.refresh = function() {
@@ -41,10 +102,9 @@ function Game(interval) {
 			if (this.readyState === 4) {
 				if (this.status === 200) {
 					game.state = JSON.parse(this.responseText);
-					console.log(this.responseText);
 					game.draw();
 				} else {
-					console.log("Error", this.status, "could not refresh");
+					console.error(this.status, "could not refresh");
 				}
 			}
 		}
@@ -57,15 +117,13 @@ function Game(interval) {
 function resizeCanvas() {
 	canvas.width = document.documentElement.clientWidth;
 	canvas.height = document.documentElement.clientHeight;
-
-	console.log(canvas.width, canvas.height);
-
-	game.draw();
 }
 
 var game = new Game();
 
 resizeCanvas();
 
- window.addEventListener("resize", resizeCanvas, false);
+window.addEventListener("resize", resizeCanvas, false);
+
+window.addEventListener("keyup", game.keyPressHandler, false);
 
