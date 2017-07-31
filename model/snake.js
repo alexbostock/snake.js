@@ -22,15 +22,32 @@ function Game(interval, w, h) {
 	}
 
 	this.addSnake = function() {
-		//var pos = new Vector(i, 0);
-		//var vel = new Vector(i, h - 1);
-
 		var pos = new Vector(this.width / 2, this.height / 2);
 		var vel = new Vector(1, 0);
 
-		this.snakes.push(new Snake(pos, vel));
+		var snake = new Snake(pos, vel);
 
-		return this.snakes.length - 1;
+		// First try to replace any dead snakes
+
+		var index = -1;
+
+		for (var i = 0; i < this.snakes.length; i++) {
+			if (this.snakes[i].dead) {
+				index = i;
+				break;
+			}
+		}
+
+		if (index === -1) {
+			// If there are no dead snakes, add a new one to the list
+
+			this.snakes.push(snake);
+			index = this.snakes.length - 1;
+		} else {
+			this.snakes[i] = snake;
+		}
+
+		return index;
 	}
 
 	this.move = function(dir, id) {
@@ -58,11 +75,11 @@ function Game(interval, w, h) {
 					return false;
 			}
 
-			if (v.add(s.velocity).equals(new Vector(0, 0))) {
+			if (v.add(s.vel).equals(new Vector(0, 0))) {
 				// Don't allow about turn
 				return false;
 			} else {
-				s.velocity = v;
+				s.vel = v;
 				return true;
 			}
 		}
@@ -72,29 +89,47 @@ function Game(interval, w, h) {
 		this.clock++;
 
 		for (var i = 0; i < this.snakes.length; i++) {
-			this.snakes[i].move();
+			var snake = this.snakes[i];
+			
+			if (! snake.dead) {
+				snake.move();
+			}
 		}
 
 		for (var i = 0; i < this.snakes.length; i++) {
 			// Detect collisions
 
+			if (this.snakes[i].dead) {
+				continue;
+			}
+
 			snake:
 			for (var j = 0; j < this.snakes.length; j++) {
+				if (this.snakes[j].dead) {
+					continue;
+				}
+
 				for (var k = 0; k < this.snakes[j].tail.length; k++) {
 					if (i === j && k === 0) {
 						continue;
 					}
 
-					if (this.snakes[i].position.equals(this.snakes[j].tail[k])) {
-						this.snakes.splice(i, 1);
+					if (this.snakes[i].pos.equals(this.snakes[j].tail[k])) {
+						this.snakes[i].dead = true;
+
+						// Kill both snakes iff the collision is head on
+						if (this.snakes[i].vel.add(this.snakes[j].vel).equals(new Vector(0, 0))) {
+							this.snakes[j].dead = true;
+						}
+
 						break snake;
 					}
 				}
 			}
 
 			for (var j = 0; j < this.wall.length; j++) {
-				if (this.snakes[i].position.equals(this.wall[j])) {
-					this.snakes.splice(i, 1);
+				if (this.snakes[i].pos.equals(this.wall[j])) {
+					this.snakes[i].dead = true;
 					break;
 				}
 			}
@@ -105,9 +140,10 @@ function Game(interval, w, h) {
 }
 
 function Snake(pos, vel) {
-	this.position = pos;
-	this.velocity = vel;
+	this.pos = pos;
+	this.vel = vel;
 	this.tail = [pos];
+	this.dead = false;
 
 	this.colour = "#00FF00";
 
@@ -115,8 +151,8 @@ function Snake(pos, vel) {
 		// Make the tail one cell longer
 		// Should be called instead of move()
 
-		this.position = this.position.add(this.velocity);
-		this.tail.unshift(this.position);
+		this.pos = this.pos.add(this.vel);
+		this.tail.unshift(this.pos);
 	}
 
 	// Start with length 3
@@ -124,9 +160,9 @@ function Snake(pos, vel) {
 	this.increaseLength();
 
 	this.move = function() {
-		this.position = this.position.add(this.velocity);
+		this.pos = this.pos.add(this.vel);
 	
-		this.tail.unshift(this.position);
+		this.tail.unshift(this.pos);
 		this.tail.pop();
 	}
 }

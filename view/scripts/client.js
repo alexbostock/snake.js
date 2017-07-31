@@ -54,6 +54,10 @@ function Game(interval) {
 		for (var i = 0; i < this.state.snakes.length; i++) {
 			var snake = this.state.snakes[i];
 
+			if (snake.dead) {
+				continue;
+			}
+
 			context.fillStyle = snake.colour;
 
 			snake = snake.tail;
