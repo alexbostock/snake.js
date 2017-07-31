@@ -4,6 +4,8 @@
 npm install
 
 # Minify
+rm view/scripts/*.min.*
+
 node node_modules/minifier/index.js view/scripts
 
 # Generate config file
