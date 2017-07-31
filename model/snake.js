@@ -111,12 +111,23 @@ function Snake(pos, vel) {
 
 	this.colour = "#00FF00";
 
+	this.increaseLength = function() {
+		// Make the tail one cell longer
+		// Should be called instead of move()
+
+		this.position = this.position.add(this.velocity);
+		this.tail.unshift(this.position);
+	}
+
+	// Start with length 3
+	this.increaseLength();
+	this.increaseLength();
+
 	this.move = function() {
 		this.position = this.position.add(this.velocity);
 	
-		for (var i = 0; i < this.tail.length; i++) {
-			this.tail[i] = this.tail[i].add(this.velocity);
-		}
+		this.tail.unshift(this.position);
+		this.tail.pop();
 	}
 }
 
