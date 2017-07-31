@@ -78,6 +78,15 @@ function Game(interval) {
 
 			context.fillRect(leftMargin + x * cellSize, topMargin + y * cellSize, cellSize, cellSize);
 		}
+
+		context.fillStyle = "#FF0000";
+
+		for (var i = 0; i < this.state.apples.length; i++) {
+			var x = this.state.apples[i].x;
+			var y = this.state.apples[i].y;
+
+			context.fillRect(leftMargin + x * cellSize, topMargin + y * cellSize, cellSize, cellSize);
+		}
 	}
 
 	this.keyPressHandler = function(k) {

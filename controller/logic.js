@@ -5,7 +5,7 @@ const serverKey = uniqid();	// For admin purposes
 
 console.log("Server key:", serverKey);
 
-const interval = 500;	// milliseconds
+const interval = 300;	// milliseconds
 
 const width = 100;
 const height = 50;

@@ -10,6 +10,7 @@ function Game(interval, w, h) {
 	this.height = h;
 
 	this.wall = [];
+	this.apples = [];
 
 	for (var i = 0; i < w; i++) {
 		this.wall.push(new Vector(i, 0));
@@ -85,6 +86,63 @@ function Game(interval, w, h) {
 		}
 	}
 
+	this.occupied = function(cell) {
+		// Checks whether a cell is occupied
+
+		for (var i = 0; i < this.wall.length; i++) {
+			if (cell.equals(this.wall[i])) {
+				return true;
+			}
+		}
+
+		for (var i = 0; i < this.apples.length; i++) {
+			if (cell.equals(this.apples[i])) {
+				return true;
+			}
+		}
+
+		for (var i = 0; i < this.snakes.length; i++) {
+			var snake = this.snakes[i].tail;
+
+			for (var j = 0; j < snake.length; j++) {
+				if (cell.equals(snake[j])) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	this.spawnApples = function() {
+		var numApples = this.apples.length;
+
+		var prob;
+		if (numApples === 0) {
+			prob = 1;
+		} else if (numApples < 20) {
+			prob = 1 - numApples / 20;
+		} else {
+			prob = 0;
+		}
+
+		// Fudge factor so we don't spawn apples too much
+		prob /= 5;
+
+		var rand = Math.random();
+
+		if (rand < prob) {
+			do {
+				var x = randomInt(0, this.width - 1);
+				var y = randomInt(0, this.height - 1);
+
+				var cell = new Vector(x, y);
+			} while (this.occupied(cell));
+
+			this.apples.push(cell);
+		}
+	}
+
 	this.step = function() {
 		this.clock++;
 
@@ -96,10 +154,14 @@ function Game(interval, w, h) {
 			}
 		}
 
+		// Detect collisions
+		
 		for (var i = 0; i < this.snakes.length; i++) {
 			// Detect collisions
 
-			if (this.snakes[i].dead) {
+			var snake = this.snakes[i]
+
+			if (snake.dead) {
 				continue;
 			}
 
@@ -114,11 +176,11 @@ function Game(interval, w, h) {
 						continue;
 					}
 
-					if (this.snakes[i].pos.equals(this.snakes[j].tail[k])) {
-						this.snakes[i].dead = true;
+					if (snake.pos.equals(this.snakes[j].tail[k])) {
+						snake.dead = true;
 
 						// Kill both snakes iff the collision is head on
-						if (this.snakes[i].vel.add(this.snakes[j].vel).equals(new Vector(0, 0))) {
+						if (snake.vel.add(this.snakes[j].vel).equals(new Vector(0, 0))) {
 							this.snakes[j].dead = true;
 						}
 
@@ -128,12 +190,21 @@ function Game(interval, w, h) {
 			}
 
 			for (var j = 0; j < this.wall.length; j++) {
-				if (this.snakes[i].pos.equals(this.wall[j])) {
-					this.snakes[i].dead = true;
+				if (snake.pos.equals(this.wall[j])) {
+					snake.dead = true;
 					break;
 				}
 			}
+
+			for (var j = 0; j < this.apples.length; j++) {
+				if (snake.pos.equals(this.apples[j])) {
+					snake.increaseLength();
+					this.apples.splice(j, 1);
+				}
+			}
 		}
+
+		this.spawnApples();
 
 		return JSON.stringify(this);
 	}
@@ -149,22 +220,22 @@ function Snake(pos, vel) {
 
 	this.increaseLength = function() {
 		// Make the tail one cell longer
-		// Should be called instead of move()
 
-		this.pos = this.pos.add(this.vel);
-		this.tail.unshift(this.pos);
+		this.tail.push(this.trail);
 	}
-
-	// Start with length 3
-	this.increaseLength();
-	this.increaseLength();
 
 	this.move = function() {
 		this.pos = this.pos.add(this.vel);
 	
 		this.tail.unshift(this.pos);
-		this.tail.pop();
+		this.trail = this.tail.pop();
 	}
+
+	// Start with length 3
+	this.move();
+	this.increaseLength();
+	this.move();
+	this.increaseLength();
 }
 
 function Vector(x, y) {
@@ -185,4 +256,8 @@ function Vector(x, y) {
 }
 
 exports.Game = Game;
+
+function randomInt(min, max) {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
