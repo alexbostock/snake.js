@@ -16,5 +16,5 @@ snake.js is a multi-player snake game web-app, built using node.
 4. Start the server.
 	`node index.js`
 
-The game can be accessed at `localhost:8000`
+The game can be accessed at `http://localhost:8000`
 
