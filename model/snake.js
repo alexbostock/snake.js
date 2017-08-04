@@ -1,5 +1,4 @@
-// snake.js
-// Base data model
+"use strict";
 
 function Game(interval, w, h) {
 	this.clock = 0;

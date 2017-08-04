@@ -1,3 +1,5 @@
+"use strict";
+
 const game = require("./controller/logic.js");
 
 const config = require("./config.js");

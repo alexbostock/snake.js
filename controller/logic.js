@@ -1,3 +1,5 @@
+"use strict";
+
 const model = require("../model/snake.js");
 const uniqid = require("uniqid");
 
