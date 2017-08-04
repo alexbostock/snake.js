@@ -27,13 +27,13 @@ function Game(interval) {
 		}
 	}
 
-	xhr.open("POST", "register", true);
+	xhr.open("POST", "../register", true);
 	xhr.send();
 
 	this.control = function(key) {
 		var req = new XMLHttpRequest();
 
-		req.open("POST", "control/" + this.id + "/" + key, true);
+		req.open("POST", "../control/" + this.id + "/" + key, true);
 		req.send();
 	}
 
@@ -133,7 +133,7 @@ function Game(interval) {
 			}
 		}
 		
-		xhr.open("GET", "state", true);
+		xhr.open("GET", "../state", true);
 		xhr.send();
 	}
 }
