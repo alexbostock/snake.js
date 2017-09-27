@@ -2,10 +2,6 @@
 
 const game = require("./controller/logic.js");
 
-const config = require("./config.js");
-
-const root = config.root;
-
 const express = require("express");
 const app = express();
 
@@ -14,8 +10,7 @@ app.post("/control/:key/:dir", game.control);
 app.post("/register", game.register);
 app.get("/state", game.state);
 
-//app.use(express.static("./view"));
-app.use(express.static(root + "/view"));
+app.use(express.static(__dirname + "/view"));
 
 app.use((req, res) => {
 	res.sendStatus(400);
